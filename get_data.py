@@ -46,8 +46,8 @@ def get_prime_part_relic(item_to_find):
 
 
 
-query=get_prime_part_relic('Braton Prime Stock')
-t=get_available_prime()
+
+
 
 
 
