@@ -2,48 +2,80 @@
 import psycopg2
 import requests
 
+def get_available_prime():
+    current_prime_part=[]
+    response_2 = requests.get('https://drops.warframestat.us/data/all.json').json()
+    for i in response_2['relics']:
+        for r in i['rewards']:
+            item_name = r['itemName']
+            current_prime_part.append(item_name)
 
 
-#response = requests.get('https://api.warframe.market/v1/items').json()
-response_2=requests.get('https://drops.warframestat.us/data/all.json').json()
-relic_name=set()
-
-
-for i in response_2['relics']:
-    relic_info=f"{i['tier']}_{i['relicName']}"
-    print(i['rewards'])
-    relic_name.add(relic_info)
-
-
-
+    print(f"There are {len(current_prime_part)} prime_parts  to get/farm ")
+    return current_prime_part
 
 
 
 
+def get_prime_part_relic(item_to_find):
+    item_list = {}
+
+    response_2=requests.get('https://drops.warframestat.us/data/all.json').json()
 
 
-#items_name=[i for i in response['payload']['items']['item_name']]
-#relic_name_list=[]
+
+    relic_info_return_dictonary = []
+
+    for i in response_2['relics']:
+
+
+        relic_info=f"{i['tier']}_{i['relicName']}_{i["state"]}"
+
+
+        for r in i['rewards']:
+            item_name = r['itemName']
+
+            rarity_of_getting_item = r['rarity']
+            chance_of_getting_item = r['chance']
+
+            if item_name ==item_to_find:
+                item_list[relic_info]=[rarity_of_getting_item,chance_of_getting_item]
+
+    return item_list
 
 
 
 
-# Set your environment variables
-PGHOST= 'ep-crimson-term-61485968.us-east-2.aws.neon.tech'
-PGDATABASE = 'tableOfInfo'
-PGUSER = 'ThunderIW'
-PGPASSWORD = 'Bgds0ALIbE1O'
+query=get_prime_part_relic('Braton Prime Stock')
+t=get_available_prime()
 
-# Establish a connection using environment variables
-connection = psycopg2.connect(
-    host=PGHOST,
-    database=PGDATABASE,
-    user=PGUSER,
-    password=PGPASSWORD
-)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#cursor.execute(f"""INSERT INTO warframe_relic(relic_name) VALUES('{relic_info}')""")
+        #connection.commit()
+
 '''
 # Create a cursor
-cursor = connection.cursor()
+
 cursor.execute("""SELECT * 
 FROM Warframe_relic""")
 print(cursor.fetchone())
@@ -51,6 +83,5 @@ print(cursor.fetchone())
 # Now you can use the 'cursor' object to execute SQL queries
 
 # Remember to close the cursor and connection when you're done
-cursor.close()
-connection.close()
+
 '''
