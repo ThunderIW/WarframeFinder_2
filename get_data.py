@@ -3,16 +3,29 @@ import psycopg2
 import requests
 
 def get_available_prime():
-    current_prime_part=[]
+    current_prime_part=set()
+
     response_2 = requests.get('https://drops.warframestat.us/data/all.json').json()
     for i in response_2['relics']:
         for r in i['rewards']:
             item_name = r['itemName']
-            current_prime_part.append(item_name)
+            current_prime_part.add(item_name)
+
+    sorted_prime_list = sorted(current_prime_part)
 
 
-    print(f"There are {len(current_prime_part)} prime_parts  to get/farm ")
-    return current_prime_part
+
+    for prime in sorted_prime_list:
+        if "Prime" not in prime:
+            sorted_prime_list.remove(prime)
+
+
+
+
+
+
+
+    return sorted_prime_list
 
 
 
@@ -42,6 +55,7 @@ def get_prime_part_relic(item_to_find):
                 item_list[relic_info]=[rarity_of_getting_item,chance_of_getting_item]
 
     return item_list
+
 
 
 
