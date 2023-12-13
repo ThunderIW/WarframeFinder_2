@@ -9,9 +9,9 @@ from PIL import Image
 
 def get_prime_part_image(item_to_find):
 
-    word=str(item_to_find).split(" ")
-    modified_word=f"{word[0]} {word[1]}"
-    print(modified_word)
+    #word=str(item_to_find).split(" ")
+    #modified_word=f"{word[0]} {word[1]}"
+    #print(modified_word)
 
     possible_image=[]
     global t, ImageToDownload
@@ -51,17 +51,13 @@ def get_prime_part_image(item_to_find):
 
 
 
-
-
-
-
     else:
         print("No search results found for 'Mirage Prime'.")
 
     urllib.request.urlretrieve(ImageToDownload, r"item_icons\image.png")
     image=Image.open(r"item_icons\image.png")
     image.thumbnail((300,300))
-    image.save(r"item_icons\image.png")
+    image.save(rf"item_icons\{item_to_find}.png")
 
 
 
@@ -123,3 +119,17 @@ def get_prime_part_relic(item_to_find):
 
     return item_list
 
+
+
+''''
+for i in t:
+    item=str(i).split(" ")
+    modified_item=f"{item[0]} {item[1]}"
+    current_prime_available.add(modified_item)
+
+#modified_word = str(chosen_prime_part).split(" ")
+#    item_name = f"{modified_word[0]} {modified_word[1]}"
+
+for items in  current_prime_available:
+    get_prime_part_image(items)
+'''
