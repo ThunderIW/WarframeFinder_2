@@ -51,6 +51,10 @@ def get_prime_part_image(item_to_find):
 
 
 
+
+
+
+
     else:
         print("No search results found for 'Mirage Prime'.")
 
@@ -119,4 +123,3 @@ def get_prime_part_relic(item_to_find):
 
     return item_list
 
-get_prime_part_image("Baza Prime")
