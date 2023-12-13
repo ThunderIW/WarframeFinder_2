@@ -4,9 +4,14 @@ import requests
 import urllib
 import fandom
 from bs4 import BeautifulSoup
+from PIL import Image
 
 
 def get_prime_part_image(item_to_find):
+
+    word=str(item_to_find).split(" ")
+    modified_word=f"{word[0]} {word[1]}"
+    print(modified_word)
 
     possible_image=[]
     global t, ImageToDownload
@@ -19,6 +24,7 @@ def get_prime_part_image(item_to_find):
     if search_results:
         # Get the page ID from the search results
         page_id = search_results[0][1]
+        print(page_id)
 
         # Create a FandomPage object
         fandom_page = fandom.FandomPage(wiki='warframe', language='en', pageid=page_id)
@@ -35,6 +41,7 @@ def get_prime_part_image(item_to_find):
             if src:
                 if f"{item_to_find.replace(" ","")}" in src:
                     possible_image.append(src)
+
         print(possible_image)
         if len(possible_image)>1:
             ImageToDownload=possible_image[1]
@@ -47,7 +54,12 @@ def get_prime_part_image(item_to_find):
     else:
         print("No search results found for 'Mirage Prime'.")
 
-    urllib.request.urlretrieve(ImageToDownload, "image.png")
+    urllib.request.urlretrieve(ImageToDownload, r"item_icons\image.png")
+    image=Image.open(r"item_icons\image.png")
+    image.thumbnail((300,300))
+    image.save(r"item_icons\image.png")
+
+
 
 
 
@@ -107,4 +119,4 @@ def get_prime_part_relic(item_to_find):
 
     return item_list
 
-#get_prime_part_image('Octavia Prime')
+get_prime_part_image("Baza Prime")

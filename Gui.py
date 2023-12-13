@@ -1,7 +1,17 @@
-
+import os
+import time
+import urllib
 
 import dearpygui.dearpygui as dpg
-from get_data import get_available_prime,get_prime_part_relic
+from get_data import get_available_prime,get_prime_part_relic,get_prime_part_image
+
+
+
+
+
+
+
+
 
 
 def find_relic(sender,app_data):
@@ -19,6 +29,34 @@ def find_relic(sender,app_data):
     dpg.configure_item("-RELIC_TABLE-",show=True)
 
 
+def set_image(sender,app_data):
+
+    chosen_prime_part=dpg.get_value('-I-')
+    modified_word=str(chosen_prime_part)
+    new_word=modified_word.split(" ")
+
+    item_name_final=f"{new_word[0]} {new_word[1]}"
+    get_prime_part_image(item_name_final)
+    width, height, channels, data = dpg.load_image("item_icons\image")
+
+    #with dpg.texture_registry():
+    #    dpg.add_static_texture(width=width, height=height, default_value=data, tag='-Image-')
+    #dpg.configure_item('t',show=True)
+
+    #time.sleep(1)
+    #dpg.delete_item("-Image-")
+    #dpg.set_value('t',data)
+    #dpg.configure_item("t", show=True)
+
+    os.remove('image.png')
+
+
+
+
+    #dpg.delete_item('-II-')
+    #get_prime_part_image(chosen_prime_part)
+    #width, height, channels, data = dpg.load_image("image.png")
+
 
 
 
@@ -26,10 +64,21 @@ def find_relic(sender,app_data):
 dpg.create_context()
 dpg.create_viewport(title='Custom Title', width=600, height=300)
 
+
+
+
+
 with dpg.window(label="Example Window",tag='w'):
+    width, height, channels, data = dpg.load_image("image.png")
+    with dpg.texture_registry():
+        dpg.add_static_texture(width=width, height=height, default_value=data, tag='-Item_Image-')
+    dpg.add_image(texture_tag="-Item_Image-", show=False, tag='t')
+
+
+
     with dpg.group(horizontal=True):
         dpg.add_text("Prime part to find:")
-        dpg.add_combo(items=get_available_prime(),tag='-I-')
+        dpg.add_combo(items=get_available_prime(),tag='-I-',callback=set_image,width=200)
 
     dpg.add_button(label="Get relics to farm",callback=find_relic)
     dpg.add_spacer(height=20)
