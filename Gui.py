@@ -25,6 +25,7 @@ def find_relic(sender,app_data):
     global relic_list
 
     chosen_prime_part = dpg.get_value('-I-')
+    print(chosen_prime_part)
 
 
 
@@ -32,7 +33,7 @@ def find_relic(sender,app_data):
     item_name = f"{modified_word[0]} {modified_word[1]}"
 
     relic_list = get_prime_part_relic(chosen_prime_part)
-
+    print(relic_list)
 
 
     relic = set()

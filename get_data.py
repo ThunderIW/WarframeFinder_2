@@ -5,6 +5,7 @@ import urllib
 import fandom
 from bs4 import BeautifulSoup
 from PIL import Image
+import csv
 
 
 def get_prime_part_image(item_to_find):
@@ -133,3 +134,14 @@ for i in t:
 for items in  current_prime_available:
     get_prime_part_image(items)
 '''
+
+def ConvertCSV(t):
+    csv_file_path = 'relic_data.csv'
+    with open(csv_file_path,'w',newline='') as csv_file:
+        csv_writer = csv.writer(csv_file)
+        csv_writer.writerow(['Relic', 'Rarity', 'Percentage'])
+        for relic,data in t.items():
+            csv_writer.writerow([relic,data[0],data[1]])
+
+
+
