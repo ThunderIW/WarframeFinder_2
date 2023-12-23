@@ -1,11 +1,10 @@
 
-import psycopg2
+
 import requests
-import urllib
 import fandom
 from bs4 import BeautifulSoup
-from PIL import Image
 import csv
+import urllib.request
 
 
 def get_prime_part_image(item_to_find):
@@ -13,9 +12,6 @@ def get_prime_part_image(item_to_find):
     #word=str(item_to_find).split(" ")
     #modified_word=f"{word[0]} {word[1]}"
     #print(modified_word)
-
-    possible_image=[]
-    global t, ImageToDownload
     fandom.set_wiki('warframe')
 
     # Search for a page (Mirage Prime in this case)
@@ -24,41 +20,26 @@ def get_prime_part_image(item_to_find):
     # Check if there are search results
     if search_results:
         # Get the page ID from the search results
-        page_id = search_results[0][1]
-        print(page_id)
+        id = search_results[0][1]
+        print(id)
+        page_to_use=fandom.page(pageid=id)
+        fandom_url=page_to_use.url
 
-        # Create a FandomPage object
-        fandom_page = fandom.FandomPage(wiki='warframe', language='en', pageid=page_id)
+        reponse=requests.get(fandom_url)
+        soup=BeautifulSoup(reponse.text,'html.parser')
 
-        # Create a BeautifulSoup object using the HTML content of the page
-        soup = BeautifulSoup(fandom_page.html, 'html.parser')
+        image_tags=soup.find_all('img')
 
-        # Find all image tags in the HTML
-        images = soup.find_all('img')
+        for images in image_tags:
+            img_url=images.get('src')
+            #print(img_url)
+            text=f"{item_to_find}Full.png"
+            new_image=text.replace(" ","")
 
-        # Extract and print the image URLs
-        for img in images:
-            src = img.get('src')
-            if src:
-                if f"{item_to_find.replace(" ","")}" in src:
-                    possible_image.append(src)
+            if new_image in img_url:
+                download_img=img_url
 
-        print(possible_image)
-        if len(possible_image)>1:
-            ImageToDownload=possible_image[1]
-
-        if len(possible_image)<=1:
-            ImageToDownload=possible_image[0]
-
-
-
-    else:
-        print("No search results found for 'Mirage Prime'.")
-
-    urllib.request.urlretrieve(ImageToDownload, r"item_icons\image.png")
-    image=Image.open(r"item_icons\image.png")
-    image.thumbnail((300,300))
-    image.save(rf"item_icons\{item_to_find}.png")
+    urllib.request.urlretrieve(download_img,f"{item_to_find}.png")
 
 
 
@@ -92,8 +73,6 @@ def get_available_prime():
     return sorted_prime_list
 
 
-
-
 def get_prime_part_relic(item_to_find):
     item_list = {}
 
@@ -101,7 +80,7 @@ def get_prime_part_relic(item_to_find):
 
 
 
-    relic_info_return_dictonary = []
+    relic_info_return_dictonary = {}
 
     for i in response_2['relics']:
 
@@ -116,32 +95,18 @@ def get_prime_part_relic(item_to_find):
             chance_of_getting_item = r['chance']
 
             if item_name ==item_to_find:
-                item_list[relic_info]=[rarity_of_getting_item,chance_of_getting_item]
+                relic_info_return_dictonary["rairity"]=rarity_of_getting_item
+                relic_info_return_dictonary['chance']=chance_of_getting_item
+                item_list[relic_info]=relic_info_return_dictonary
 
     return item_list
 
 
 
-''''
-for i in t:
-    item=str(i).split(" ")
-    modified_item=f"{item[0]} {item[1]}"
-    current_prime_available.add(modified_item)
 
-#modified_word = str(chosen_prime_part).split(" ")
-#    item_name = f"{modified_word[0]} {modified_word[1]}"
 
-for items in  current_prime_available:
-    get_prime_part_image(items)
-'''
 
-def ConvertCSV(t):
-    csv_file_path = 'relic_data.csv'
-    with open(csv_file_path,'w',newline='') as csv_file:
-        csv_writer = csv.writer(csv_file)
-        csv_writer.writerow(['Relic', 'Rarity', 'Percentage'])
-        for relic,data in t.items():
-            csv_writer.writerow([relic,data[0],data[1]])
+
 
 
 
