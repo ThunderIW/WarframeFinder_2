@@ -80,7 +80,7 @@ def get_prime_part_relic(item_to_find):
 
 
 
-    relic_info_return_dictonary = {}
+    relic_info_return_list = []
 
     for i in response_2['relics']:
 
@@ -94,10 +94,20 @@ def get_prime_part_relic(item_to_find):
             rarity_of_getting_item = r['rarity']
             chance_of_getting_item = r['chance']
 
-            if item_name ==item_to_find:
-                relic_info_return_dictonary["rairity"]=rarity_of_getting_item
-                relic_info_return_dictonary['chance']=chance_of_getting_item
-                item_list[relic_info]=relic_info_return_dictonary
+
+
+            if item_name == item_to_find:
+
+                if relic_info in item_list:
+                    item_list[relic_info].append((rarity_of_getting_item, chance_of_getting_item))
+                else:
+                    item_list[relic_info]=[(rarity_of_getting_item, chance_of_getting_item)]
+
+
+
+    #for info in relic_info_return_list:
+
+
 
     return item_list
 

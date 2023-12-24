@@ -8,13 +8,34 @@ from get_data import get_available_prime,get_prime_part_relic,get_prime_part_ima
 
 
 
-def clear_table_rows(sender, app_data):
+def clear_info(sender, app_data):
     dpg.configure_item("-N-",show=False)
-    for relic_name in relic_list.keys():
-        row_id = f"row_{relic_name}"
-        dpg.delete_item(row_id)
-    dpg.configure_item("-RELIC_TABLE-",show=False)
     dpg.configure_item("-relics-",show=False)
+    dpg.configure_item('get_drop_info',show=False)
+
+def clear_table(sender,app_data):
+    for relic in relic_list.keys():
+
+
+def display_drops(sender,app_data):
+    chosen_relic=dpg.get_value("-relics-")
+    for relic in relic_list.keys():
+        name=f"{relic.split("_")[0]}_{relic.split("_")[1]}"
+        if name==chosen_relic:
+            rairty=relic_list[relic][0][0]
+            chance=relic_list[relic][0][1]
+
+
+
+
+            row_id = f"row_{relic}"
+            with dpg.table_row(parent='-RELIC_TABLE-', id=row_id):
+                dpg.add_text(relic)
+                dpg.add_text(rairty)
+                dpg.add_text(f"{chance}%")
+
+            dpg.configure_item("-RELIC_TABLE-", show=True)
+            dpg.configure_item("ClearTable",show=True)
 
 
 
@@ -38,9 +59,24 @@ def find_relic(sender,app_data):
 
     relic = set()
 
+
+    for keys in relic_list.keys():
+        relic_name=f'{keys.split("_")[0]}_{keys.split("_")[1]}'
+        relic.add(relic_name)
+
+    number_of_relics=len(relic)
+    relic_as_a_list=list(relic)
+
+
+    dpg.set_value("-number-",number_of_relics)
+    #dpg.set_value("-relics-",list(relic))
+    dpg.configure_item('-N-',show=True)
+    dpg.configure_item('-relics-',show=True,width=500,items=relic_as_a_list,num_items=number_of_relics)
+    dpg.configure_item('get_drop_info',show=True)
+
     # Load the new image
 
-
+    '''
     for r in relic_list.keys():
         name = r.split("_")
         relic_info = f"{name[0]}_{name[1]}"
@@ -53,16 +89,9 @@ def find_relic(sender,app_data):
     dpg.configure_item("-relics-", width=300)
     dpg.configure_item("-relics-", show=True)
 
-    for relic_name in relic_list.keys():
-        row_id = f"row_{relic_name}"
-        with dpg.table_row(parent='-RELIC_TABLE-', id=row_id):
-            dpg.add_text(relic_name)
-            dpg.add_text(relic_list[relic_name][0])
-            dpg.add_text(f"{relic_list[relic_name][1]}%")
+   
 
-    dpg.configure_item("-RELIC_TABLE-", show=True)
-
-
+'''
 
 
 
@@ -97,13 +126,18 @@ with dpg.window(label="Example Window",tag='w'):
         dpg.add_combo(items=get_available_prime(),tag='-I-',width=200,callback=find_relic)
     with dpg.group(horizontal=True):
         #dpg.add_button(label="Get relics to farm",callback=find_relic)
-        dpg.add_button(label="clear",callback=clear_table_rows)
+        dpg.add_button(label="clear",callback=clear_info)
 
     with dpg.group(horizontal=True,show=False,tag='-N-'):
         dpg.add_text("Number of relic you need to farm are")
         dpg.add_input_text(tag="-number-",width=20)
-    dpg.add_input_text(tag='-relics-',show=False)
+    dpg.add_listbox(items=[], tag='-relics-', show=False)
+    #dpg.add_spacer(height=20)
+    dpg.add_button(label="get info",show=False,tag='get_drop_info',callback=display_drops)
+
     dpg.add_spacer(height=20)
+
+
 
 
 
@@ -112,6 +146,8 @@ with dpg.window(label="Example Window",tag='w'):
         dpg.add_table_column(label="Relic name",)
         dpg.add_table_column(label="Rarity")
         dpg.add_table_column(label="Chance(%)")
+
+    dpg.add_button(label="Clear Table",show=False,tag='ClearTable',callback=clear_table)
 
 
 
