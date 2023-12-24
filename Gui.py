@@ -50,7 +50,6 @@ def find_relic(sender,app_data):
     global relic_list
 
     chosen_prime_part = dpg.get_value('-I-')
-    print(chosen_prime_part)
 
 
 
@@ -58,7 +57,6 @@ def find_relic(sender,app_data):
     item_name = f"{modified_word[0]} {modified_word[1]}"
 
     relic_list = get_prime_part_relic(chosen_prime_part)
-    print(relic_list)
 
 
     relic = set()
@@ -80,22 +78,7 @@ def find_relic(sender,app_data):
 
     # Load the new image
 
-    '''
-    for r in relic_list.keys():
-        name = r.split("_")
-        relic_info = f"{name[0]}_{name[1]}"
-        relic.add(relic_info)
 
-    number_of_relic = len(list(relic))
-    dpg.set_value("-number-", number_of_relic)
-    dpg.configure_item("-N-", show=True)
-    dpg.set_value("-relics-", list(relic))
-    dpg.configure_item("-relics-", width=300)
-    dpg.configure_item("-relics-", show=True)
-
-   
-
-'''
 
 
 
