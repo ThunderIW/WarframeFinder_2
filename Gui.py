@@ -12,9 +12,13 @@ def clear_info(sender, app_data):
     dpg.configure_item("-N-",show=False)
     dpg.configure_item("-relics-",show=False)
     dpg.configure_item('get_drop_info',show=False)
+    dpg.configure_item("-RELIC_TABLE-",show=False)
+    dpg.configure_item("ClearTable",show=False)
 
 def clear_table(sender,app_data):
     for relic in relic_list.keys():
+        row_id = f"row_{relic}"
+        dpg.delete_item(row_id)
 
 
 def display_drops(sender,app_data):
