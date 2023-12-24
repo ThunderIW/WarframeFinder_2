@@ -109,7 +109,7 @@ def find_relic(sender,app_data):
 
 
 dpg.create_context()
-dpg.create_viewport(title='Custom Title', width=600, height=300)
+dpg.create_viewport(title='Warframe prime finder', width=600, height=300)
 
 
 
