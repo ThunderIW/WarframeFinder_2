@@ -37,7 +37,7 @@ def set_data():
 primes = get_available_prime()
 
 st.title("WarframeFinder")
-st.text("You can select the item you want from the box below or type in the item\nyou want to find")
+st.text("You can select the item you want from the box below or type in the item\nyou want to find test")
 prime_part = st.selectbox(label="Choose the part you want to get", options=primes, key="-i-")
 get_item=st.button(label="Get Relics")
 if get_item:
